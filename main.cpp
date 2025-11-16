@@ -39,15 +39,14 @@ int main() {
         "7. Wyjdz\n" <<
         "Wybor: ";
         cin >> wybor;
+        cin.ignore();
         switch (wybor) {
             case 1: {
                 // Nowe zgłoszenie trafia do kolejki
-                cin.ignore();
                 cout << "Wpisz imie: ";
                 string imie;
                 getline(cin, imie);
 
-                cin.ignore();
                 cout << "Opisz problem: ";
                 string problem;
                 getline(cin, problem);
