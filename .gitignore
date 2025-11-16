@@ -1,0 +1,35 @@
+# ---- JetBrains / CLion ----
+.idea/
+*.iml
+
+# ---- CMake ----
+CMakeFiles/
+CMakeCache.txt
+cmake-build-*/
+cmake_install.cmake
+Makefile
+
+# ---- Executables ----
+*.exe
+*.out
+*.obj
+*.o
+*.a
+*.so
+*.dll
+
+# ---- Build directories ----
+build/
+debug/
+release/
+
+# ---- Logs ----
+*.log
+
+# ---- OS-specific ----
+# Windows
+Thumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
