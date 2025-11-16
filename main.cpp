@@ -3,6 +3,7 @@
 #include <stack>
 #include <string>
 #include <vector>
+#include <fstream>
 using namespace std;
 
 // --- Dane podstawowe klienta ---
@@ -10,7 +11,7 @@ struct Klient {
     string imie;
     string problem;
 
-    Klient(string i, string p) : imie(i), problem(p) {}
+    Klient(string i = "", string p = "") : imie(i), problem(p) {}
 
     // Pomocnicze wypisywanie klienta
     const void pokaz() {
@@ -46,11 +47,26 @@ int main() {
                 cout << "Wpisz imie: ";
                 string imie;
                 getline(cin, imie);
+                //Tworzenie nowego klienta
+                Klient kl;
 
+                //Sprawdzanie istnienia klienta
+                string plik_nazwa = imie + ".txt";
+                ifstream file(plik_nazwa);
+
+                //Odczyt stanu konta, jezeli klient istnieje
+                if (file.is_open()) {
+                    string linia;
+                    file >> kl.konto.saldo;
+                    cin.ignore();
+                    getline(file, kl.konto.waluta);
+                    getline(file, kl.konto.ostatniaOperacja);
+                    file.close();
+                }
                 cout << "Opisz problem: ";
                 string problem;
                 getline(cin, problem);
-                Klient kl(imie, problem);
+                kl = (imie, problem);
                 oczekujacy.push(kl);
                 break;
             }
