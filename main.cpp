@@ -6,10 +6,26 @@
 #include <fstream>
 using namespace std;
 
+
 // --- Dane podstawowe klienta ---
+
+// --- Dane konta powiazanego z klientem ---
+struct Konto {
+    double saldo;
+    string waluta;
+    string ostatniaOperacja;
+
+    Konto(double s = 0, string w = "PLN", string o = "Brak operacji.") :
+        saldo(s),
+        waluta(w),
+        ostatniaOperacja(o)
+    {}
+};
+
 struct Klient {
     string imie;
     string problem;
+    Konto konto;
 
     Klient(string i = "", string p = "") : imie(i), problem(p) {}
 
