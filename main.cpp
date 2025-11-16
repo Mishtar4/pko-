@@ -6,9 +6,6 @@
 #include <fstream>
 using namespace std;
 
-
-// --- Dane podstawowe klienta ---
-
 // --- Dane konta powiazanego z klientem ---
 struct Konto {
     double saldo;
@@ -22,6 +19,7 @@ struct Konto {
     {}
 };
 
+// --- Dane podstawowe klienta ---
 struct Klient {
     string imie;
     string problem;
