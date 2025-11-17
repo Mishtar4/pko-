@@ -59,6 +59,39 @@ struct Konto {
             }
         }
     }
+    // --- Wyswietlanie stanu konta ---
+    void pokazSaldo()
+    {
+        cout << "Twoje saldo: " << saldo << " " << waluta << endl;
+        cout << "\nOstatnia operacja:\n"
+             << ostatniaOperacja << endl;
+    }
+    // --- Zmiana waluty konta ---
+    void zmienWalute()
+    {
+        int wybor;
+        cout << "(1.PLN, 2.EUR, 3.USD, 4.UAH)" << endl;
+        cin >> wybor;
+        switch (wybor)
+        {
+            case 1:
+                waluta = "PLN";
+                break;
+            case 2:
+                waluta = "EUR";
+                break;
+            case 3:
+                waluta = "USD";
+                break;
+            case 4:
+                waluta = "UAH";
+                break;
+            default:
+                cout << "Nie ma takiej waluty" << endl;
+        }
+        ostatniaOperacja = "Waluta zostala zmieniona na: " + waluta;
+        cout << ostatniaOperacja << endl;
+    }
 
 };
 
@@ -267,8 +300,8 @@ int main() {
                     switch (op) {
                         case 1: aktywna.konto.dodajPrzychod(); break;
                         case 2: aktywna.konto.dodajWydatek(); break;
-                        // case 3: aktywna.konto.pokazSaldo(); break;
-                        // case 4: aktywna.konto.zmienWalute(); break;
+                        case 3: aktywna.konto.pokazSaldo(); break;
+                        case 4: aktywna.konto.zmienWalute(); break;
                         case 0: {
                             case5 = true;
                             string plik_nazwa = "./data/" + aktywna.imie + ".txt";
