@@ -17,6 +17,47 @@ struct Konto {
         waluta(w),
         ostatniaOperacja(o)
     {}
+    // --- Dodanie przychodu ---
+    void dodajPrzychod(double &saldo, double kwota, string &ostatniaOperacja, string &waluta) {
+        cout << "Podaj kwote przychodu: " << endl;
+        cin >> kwota;
+        saldo += kwota;
+        if ((int)kwota == kwota)
+        {
+            ostatniaOperacja = "Dodano przychod: " + to_string((int)kwota) + " " + waluta;
+            cout << ostatniaOperacja << endl;
+        }
+        else
+        {
+            ostatniaOperacja = "Dodano przychod: " + to_string(kwota) + " " + waluta;
+            cout << ostatniaOperacja << endl;
+        }
+    }
+    // --- Dodanie wydatku ---
+    void dodajWydatek(double &saldo, double kwota, string &ostatniaOperacja, string &waluta)
+    {
+        cout << "Podaj kwote wydatku: " << endl;
+        cin >> kwota;
+        if (saldo - kwota < 0)
+        {
+            cout << "Brak srodkow!" << endl;
+        }
+        else
+        {
+            saldo -= kwota;
+            if ((int)kwota == kwota)
+            {
+                ostatniaOperacja = "Dodano wydatek: " + to_string((int)kwota) + " " + waluta;
+                cout << ostatniaOperacja << endl;
+            }
+            else
+            {
+                ostatniaOperacja = "Dodano wydatek: " + to_string(kwota) + " " + waluta;
+                cout << ostatniaOperacja << endl;
+            }
+        }
+    }
+
 };
 
 // --- Dane podstawowe klienta ---
