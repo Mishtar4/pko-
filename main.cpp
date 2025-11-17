@@ -18,8 +18,9 @@ struct Konto {
         ostatniaOperacja(o)
     {}
     // --- Dodanie przychodu ---
-    void dodajPrzychod(double &saldo, double kwota, string &ostatniaOperacja, string &waluta) {
+    void dodajPrzychod() {
         cout << "Podaj kwote przychodu: " << endl;
+        double kwota;
         cin >> kwota;
         saldo += kwota;
         if ((int)kwota == kwota)
@@ -34,9 +35,10 @@ struct Konto {
         }
     }
     // --- Dodanie wydatku ---
-    void dodajWydatek(double &saldo, double kwota, string &ostatniaOperacja, string &waluta)
+    void dodajWydatek()
     {
         cout << "Podaj kwote wydatku: " << endl;
+        double kwota;
         cin >> kwota;
         if (saldo - kwota < 0)
         {
@@ -114,14 +116,14 @@ int main() {
                 Klient kl;
 
                 //Sprawdzanie istnienia klienta
-                string plik_nazwa = imie + ".txt";
+                string plik_nazwa = "./data/" + imie + ".txt";
                 ifstream file(plik_nazwa);
 
                 //Odczyt stanu konta, jezeli klient istnieje
                 if (file.is_open()) {
                     string linia;
                     file >> kl.konto.saldo;
-                    cin.ignore();
+                    file.ignore();
                     getline(file, kl.konto.waluta);
                     getline(file, kl.konto.ostatniaOperacja);
                     file.close();
@@ -265,11 +267,11 @@ int main() {
                     switch (op) {
                         case 1: aktywna.konto.dodajPrzychod(); break;
                         case 2: aktywna.konto.dodajWydatek(); break;
-                        case 3: aktywna.konto.pokazSaldo(); break;
-                        case 4: aktywna.konto.zmienWalute(); break;
+                        // case 3: aktywna.konto.pokazSaldo(); break;
+                        // case 4: aktywna.konto.zmienWalute(); break;
                         case 0: {
                             case5 = true;
-                            string plik_nazwa = aktywna.imie + ".txt";
+                            string plik_nazwa = "./data/" + aktywna.imie + ".txt";
                             ofstream file(plik_nazwa);
                             if (file.is_open()) {
                                 file << aktywna.konto.saldo << endl;
