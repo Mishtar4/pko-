@@ -1,6 +1,6 @@
 # ---- JetBrains / CLion ----
 .idea/
-.data/
+data/
 *.iml
 
 # ---- CMake ----
