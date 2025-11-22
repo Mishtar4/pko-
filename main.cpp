@@ -7,16 +7,35 @@
 using namespace std;
 
 // --- Dane konta powiazanego z klientem ---
-struct Konto {
+class Konto {
+private:
     double saldo;
     string waluta;
     string ostatniaOperacja;
 
+public:
     Konto(double s = 0, string w = "PLN", string o = "Brak operacji.") :
         saldo(s),
         waluta(w),
         ostatniaOperacja(o)
     {}
+
+    //Settery
+    void setSaldo(double s) {saldo = s;}
+    void setWaluta(string w) {waluta = w;}
+    void setOstatniaOperacja(string o) {ostatniaOperacja = o;}
+    void setKonto(double s, string w, string o) {
+        saldo = s;
+        waluta = w;
+        ostatniaOperacja = o;
+    }
+
+    //Gettery
+    double getSaldo() {return saldo;}
+    string getWaluta() {return waluta;}
+    string getOstatniaOperacja() {return ostatniaOperacja;}
+
+
     // --- Dodanie przychodu ---
     void dodajPrzychod() {
         cout << "Podaj kwote przychodu: " << endl;
@@ -62,9 +81,8 @@ struct Konto {
     // --- Wyswietlanie stanu konta ---
     void pokazSaldo()
     {
-        cout << "Twoje saldo: " << saldo << " " << waluta << endl;
-        cout << "\nOstatnia operacja:\n"
-             << ostatniaOperacja << endl;
+        cout << "===KONTO===\nTwoje saldo: " << saldo << " " << waluta << endl;
+        cout << "\nOstatnia operacja:\n" << ostatniaOperacja << endl;
     }
     // --- Zmiana waluty konta ---
     void zmienWalute()
@@ -96,17 +114,45 @@ struct Konto {
 };
 
 // --- Dane podstawowe klienta ---
-struct Klient {
+class Klient {
+private:
     string imie;
     string problem;
     Konto konto;
 
+public:
     Klient(string i = "", string p = "") : imie(i), problem(p) {}
 
     // Pomocnicze wypisywanie klienta
     const void pokaz() {
         cout << imie << " | problem: " << problem;
     }
+
+    //Settery imię i problem
+    void setKlient(string i, string p) {
+        imie = i;
+        problem = p;
+    }
+
+    //Settery dla Konto
+    void setKonto(double s, string w, string o) {
+        konto.setKonto(s, w, o);
+    }
+
+    //Gettery dla Klienta
+    string getImie() {return imie;}
+    string getProblem() {return problem;}
+
+    //Gettery dla Konto
+    double getSaldo() {return konto.getSaldo();}
+    string getWaluta() {return konto.getWaluta();}
+    string getOstatniaOperacja() {return konto.getOstatniaOperacja();}
+
+    //Praca z kontem
+    void dodajPrzychod() {konto.dodajPrzychod();}
+    void dodajWydatek() {konto.dodajWydatek();}
+    void pokazSaldo() {konto.pokazSaldo();}
+    void zmienWalute() {konto.zmienWalute();}
 };
 
 int main() {
@@ -154,18 +200,21 @@ int main() {
 
                 //Odczyt stanu konta, jezeli klient istnieje
                 if (file.is_open()) {
-                    string linia;
-                    file >> kl.konto.saldo;
+                    double s;
+                    string w, o;
+                    file >> s;
                     file.ignore();
-                    getline(file, kl.konto.waluta);
-                    getline(file, kl.konto.ostatniaOperacja);
+                    getline(file, w);
+                    getline(file, o);
+
+                    kl.setKonto(s, w, o);
+
                     file.close();
                 }
                 cout << "Opisz problem: ";
                 string problem;
                 getline(cin, problem);
-                kl.imie = imie;
-                kl.problem = problem;
+                kl.setKlient(imie, problem);
                 oczekujacy.push(kl);
                 break;
             }
@@ -186,6 +235,8 @@ int main() {
 
                     cout << "Rozmowa rozpoczeta: ";
                     aktywna.pokaz();
+                    cout << "\n" << endl;
+                    aktywna.pokazSaldo();
                     cout << endl;
                 }
                 break;
@@ -195,9 +246,9 @@ int main() {
                 if (!maAktywna) {
                     cout << "Rozmowa nie trwa!" << endl;
                 } else {
-                    cout << "Rozmowa z klientem " << aktywna.imie << " jest wstrzymana." << endl;
+                    cout << "Rozmowa z klientem " << aktywna.getImie() << " jest wstrzymana." << endl;
                     wstrzymani.push(aktywna);
-                    aktywna = Klient("", "");
+                    aktywna = Klient();
                     maAktywna = false;
                 }
                 break;
@@ -224,9 +275,9 @@ int main() {
                 if (!maAktywna) {
                     cout << "Rozmowa nie trwa!" << endl;
                 } else {
-                    cout << "Rozmowa z " << aktywna.imie << " zostala zakonczona." << endl;
+                    cout << "Rozmowa z " << aktywna.getImie() << " zostala zakonczona." << endl;
                     zakonczone.push_back(aktywna);
-                    aktywna = Klient("", "");
+                    aktywna = Klient();
                     maAktywna = false;
                 }
                 break;
@@ -298,18 +349,18 @@ int main() {
                     "Wybor: ";
                     cin >> op;
                     switch (op) {
-                        case 1: aktywna.konto.dodajPrzychod(); break;
-                        case 2: aktywna.konto.dodajWydatek(); break;
-                        case 3: aktywna.konto.pokazSaldo(); break;
-                        case 4: aktywna.konto.zmienWalute(); break;
+                        case 1: aktywna.dodajPrzychod(); break;
+                        case 2: aktywna.dodajWydatek(); break;
+                        case 3: aktywna.pokazSaldo(); break;
+                        case 4: aktywna.zmienWalute(); break;
                         case 0: {
                             case5 = true;
-                            string plik_nazwa = "./data/" + aktywna.imie + ".txt";
+                            string plik_nazwa = "./data/" + aktywna.getImie() + ".txt";
                             ofstream file(plik_nazwa);
                             if (file.is_open()) {
-                                file << aktywna.konto.saldo << endl;
-                                file << aktywna.konto.waluta << endl;
-                                file << aktywna.konto.ostatniaOperacja << endl;
+                                file << aktywna.getSaldo() << endl;
+                                file << aktywna.getWaluta() << endl;
+                                file << aktywna.getOstatniaOperacja() << endl;
                                 file.close();
                             } else {
                                 cout << "Nie udalo sie nadpisac pliku." << endl;
