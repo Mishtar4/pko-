@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <unordered_map>
 using namespace std;
 
 // --- Dane konta powiazanego z klientem ---
@@ -88,29 +89,35 @@ public:
     void zmienWalute()
     {
         int wybor;
-        cout << "(1.PLN, 2.EUR, 3.USD, 4.UAH)" << endl;
+        string stara_waluta = waluta;
+        unordered_map<string, unordered_map<string, double>> kurs = {
+            {"PLN", {{"EUR", 0.24}, {"USD", 0.27}, {"UAH", 11.49}}},
+            {"EUR", {{"PLN", 4.24}, {"USD", 1.15}, {"UAH", 48.67}}},
+            {"USD", {{"PLN", 3.68}, {"EUR", 0.87}, {"UAH", 42.25}}},
+            {"UAH", {{"PLN", 0.087}, {"EUR", 0.021}, {"USD", 0.024}}}
+        };
+        cout << "(1.PLN, 2.EUR, 3.USD, 4.UAH)\nWybor: ";
         cin >> wybor;
-        switch (wybor)
-        {
-            case 1:
-                waluta = "PLN";
-                break;
-            case 2:
-                waluta = "EUR";
-                break;
-            case 3:
-                waluta = "USD";
-                break;
-            case 4:
-                waluta = "UAH";
-                break;
-            default:
-                cout << "Nie ma takiej waluty" << endl;
+        switch (wybor) {
+            case 1: {waluta = "PLN"; break;}
+            case 2: {waluta = "EUR"; break;}
+            case 3: {waluta = "USD"; break;}
+            case 4: {waluta = "UAH"; break;}
+            default: {cout << "Nie ma takiej waluty!" << endl; break;}
         }
-        ostatniaOperacja = "Waluta zostala zmieniona na: " + waluta;
-        cout << ostatniaOperacja << endl;
+        double stare_saldo = saldo;
+        saldo *= kurs[stara_waluta][waluta];
+        if ((int)saldo == saldo)
+        {
+            ostatniaOperacja = "Konwertacja: " + to_string(int(stare_saldo)) + " " + stara_waluta + " => " + to_string(int(saldo)) + " " + waluta;
+            cout << ostatniaOperacja << endl;
+        }
+        else
+        {
+            ostatniaOperacja = "Konwertacja: " + to_string(stare_saldo) + " " + stara_waluta + " => " + to_string(saldo) + " " + waluta;
+            cout << ostatniaOperacja << endl;
+        }
     }
-
 };
 
 // --- Dane podstawowe klienta ---
