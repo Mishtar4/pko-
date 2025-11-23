@@ -4,163 +4,8 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include <unordered_map>
+#include "Klient.h"
 using namespace std;
-
-// --- Dane konta powiazanego z klientem ---
-class Konto {
-private:
-    double saldo;
-    string waluta;
-    string ostatniaOperacja;
-
-public:
-    Konto(double s = 0, string w = "PLN", string o = "Brak operacji.") :
-        saldo(s),
-        waluta(w),
-        ostatniaOperacja(o)
-    {}
-
-    //Settery
-    void setSaldo(double s) {saldo = s;}
-    void setWaluta(string w) {waluta = w;}
-    void setOstatniaOperacja(string o) {ostatniaOperacja = o;}
-    void setKonto(double s, string w, string o) {
-        saldo = s;
-        waluta = w;
-        ostatniaOperacja = o;
-    }
-
-    //Gettery
-    double getSaldo() {return saldo;}
-    string getWaluta() {return waluta;}
-    string getOstatniaOperacja() {return ostatniaOperacja;}
-
-
-    // --- Dodanie przychodu ---
-    void dodajPrzychod() {
-        cout << "Podaj kwote przychodu: " << endl;
-        double kwota;
-        cin >> kwota;
-        saldo += kwota;
-        if ((int)kwota == kwota)
-        {
-            ostatniaOperacja = "Dodano przychod: " + to_string((int)kwota) + " " + waluta;
-            cout << ostatniaOperacja << endl;
-        }
-        else
-        {
-            ostatniaOperacja = "Dodano przychod: " + to_string(kwota) + " " + waluta;
-            cout << ostatniaOperacja << endl;
-        }
-    }
-    // --- Dodanie wydatku ---
-    void dodajWydatek()
-    {
-        cout << "Podaj kwote wydatku: " << endl;
-        double kwota;
-        cin >> kwota;
-        if (saldo - kwota < 0)
-        {
-            cout << "Brak srodkow!" << endl;
-        }
-        else
-        {
-            saldo -= kwota;
-            if ((int)kwota == kwota)
-            {
-                ostatniaOperacja = "Dodano wydatek: " + to_string((int)kwota) + " " + waluta;
-                cout << ostatniaOperacja << endl;
-            }
-            else
-            {
-                ostatniaOperacja = "Dodano wydatek: " + to_string(kwota) + " " + waluta;
-                cout << ostatniaOperacja << endl;
-            }
-        }
-    }
-    // --- Wyswietlanie stanu konta ---
-    void pokazSaldo()
-    {
-        cout << "===KONTO===\nTwoje saldo: " << saldo << " " << waluta << endl;
-        cout << "\nOstatnia operacja:\n" << ostatniaOperacja << endl;
-    }
-    // --- Zmiana waluty konta ---
-    void zmienWalute()
-    {
-        int wybor;
-        string stara_waluta = waluta;
-        unordered_map<string, unordered_map<string, double>> kurs = {
-            {"PLN", {{"EUR", 0.24}, {"USD", 0.27}, {"UAH", 11.49}}},
-            {"EUR", {{"PLN", 4.24}, {"USD", 1.15}, {"UAH", 48.67}}},
-            {"USD", {{"PLN", 3.68}, {"EUR", 0.87}, {"UAH", 42.25}}},
-            {"UAH", {{"PLN", 0.087}, {"EUR", 0.021}, {"USD", 0.024}}}
-        };
-        cout << "(1.PLN, 2.EUR, 3.USD, 4.UAH)\nWybor: ";
-        cin >> wybor;
-        switch (wybor) {
-            case 1: {waluta = "PLN"; break;}
-            case 2: {waluta = "EUR"; break;}
-            case 3: {waluta = "USD"; break;}
-            case 4: {waluta = "UAH"; break;}
-            default: {cout << "Nie ma takiej waluty!" << endl; break;}
-        }
-        double stare_saldo = saldo;
-        saldo *= kurs[stara_waluta][waluta];
-        if ((int)saldo == saldo)
-        {
-            ostatniaOperacja = "Konwertacja: " + to_string(int(stare_saldo)) + " " + stara_waluta + " => " + to_string(int(saldo)) + " " + waluta;
-            cout << ostatniaOperacja << endl;
-        }
-        else
-        {
-            ostatniaOperacja = "Konwertacja: " + to_string(stare_saldo) + " " + stara_waluta + " => " + to_string(saldo) + " " + waluta;
-            cout << ostatniaOperacja << endl;
-        }
-    }
-};
-
-// --- Dane podstawowe klienta ---
-class Klient {
-private:
-    string imie;
-    string problem;
-    Konto konto;
-
-public:
-    Klient(string i = "", string p = "") : imie(i), problem(p) {}
-
-    // Pomocnicze wypisywanie klienta
-    const void pokaz() {
-        cout << imie << " | problem: " << problem;
-    }
-
-    //Settery imię i problem
-    void setKlient(string i, string p) {
-        imie = i;
-        problem = p;
-    }
-
-    //Settery dla Konto
-    void setKonto(double s, string w, string o) {
-        konto.setKonto(s, w, o);
-    }
-
-    //Gettery dla Klienta
-    string getImie() {return imie;}
-    string getProblem() {return problem;}
-
-    //Gettery dla Konto
-    double getSaldo() {return konto.getSaldo();}
-    string getWaluta() {return konto.getWaluta();}
-    string getOstatniaOperacja() {return konto.getOstatniaOperacja();}
-
-    //Praca z kontem
-    void dodajPrzychod() {konto.dodajPrzychod();}
-    void dodajWydatek() {konto.dodajWydatek();}
-    void pokazSaldo() {konto.pokazSaldo();}
-    void zmienWalute() {konto.zmienWalute();}
-};
 
 int main() {
     queue <Klient> oczekujacy; // FIFO: nowi klienci trafiają na koniec
@@ -202,7 +47,7 @@ int main() {
                 Klient kl;
 
                 //Sprawdzanie istnienia klienta
-                string plik_nazwa = "./data/" + imie + ".txt";
+                string plik_nazwa = "../data/" + imie + ".txt";
                 ifstream file(plik_nazwa);
 
                 //Odczyt stanu konta, jezeli klient istnieje
@@ -362,7 +207,7 @@ int main() {
                         case 4: aktywna.zmienWalute(); break;
                         case 0: {
                             case5 = true;
-                            string plik_nazwa = "./data/" + aktywna.getImie() + ".txt";
+                            string plik_nazwa = "../data/" + aktywna.getImie() + ".txt";
                             ofstream file(plik_nazwa);
                             if (file.is_open()) {
                                 file << aktywna.getSaldo() << endl;
