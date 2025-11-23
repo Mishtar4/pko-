@@ -47,7 +47,7 @@ int main() {
                 Klient kl;
 
                 //Sprawdzanie istnienia klienta
-                string plik_nazwa = "../data/" + imie + ".txt";
+                string plik_nazwa = "./data/" + imie + ".txt";
                 ifstream file(plik_nazwa);
 
                 //Odczyt stanu konta, jezeli klient istnieje
@@ -207,7 +207,7 @@ int main() {
                         case 4: aktywna.zmienWalute(); break;
                         case 0: {
                             case5 = true;
-                            string plik_nazwa = "../data/" + aktywna.getImie() + ".txt";
+                            string plik_nazwa = "./data/" + aktywna.getImie() + ".txt";
                             ofstream file(plik_nazwa);
                             if (file.is_open()) {
                                 file << aktywna.getSaldo() << endl;

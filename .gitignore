@@ -1,6 +1,5 @@
 # ---- JetBrains / CLion ----
 .idea/
-data/
 *.iml
 
 # ---- CMake ----
@@ -9,6 +8,10 @@ CMakeCache.txt
 cmake-build-*/
 cmake_install.cmake
 Makefile
+
+# Data: ignore all in data/, except .gitkeep
+data/*
+!data/.gitkeep
 
 # ---- Executables ----
 *.exe
