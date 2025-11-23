@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <cstdlib>
+#include <ctime>
 #include "Klient.h"
 using namespace std;
 
@@ -24,15 +26,16 @@ int main() {
         "3. Wstrzymaj aktywna rozmowe (na stos)\n" <<
         "4. Wznow rozmowe (ze stosu)\n" <<
         "5. Zakoncz aktywna rozmowe\n" <<
-        "6. Podglad stanu\n";
+        "6. Podglad stanu\n" <<
+        "7. Dodanie losowego klienta\n";
         if (maAktywna) {
-            cout << "7. Operacja na koncie aktywnego klienta" <<  endl;
+            cout << "8. Operacja na koncie aktywnego klienta" << endl;
         }
         cout << "0. Wyjdz\n" << "Wybor: ";
         cin >> wybor;
         cin.ignore();
 
-        if (!maAktywna && wybor == 7) {
+        if (!maAktywna && wybor == 8) {
             cout << "Nie ma takiej opcji." << endl;
             continue;
         }
@@ -189,6 +192,26 @@ int main() {
                 break;
             }
             case 7: {
+                //Dodanie losowego klienta
+                srand(time(0));
+                vector<string> imiona = {"Marcin", "Adam", "Mikolaj", "Ola", "Jan"};
+                vector<string> problemy = {
+                    "Konwertacja w EUR",
+                    "Oplata za prad 200 PLN",
+                    "Oplata czynszu najmu mieszkania",
+                    "Nie otrzymano pensji.",
+                    "Przelew na komorke"
+                };
+                string i = imiona[rand() % imiona.size()];
+                string p = problemy[rand() % problemy.size()];
+                Klient kl;
+                kl.setKlient(i, p);
+                kl.setKonto(rand()%1000, "PLN", "Brak operacji.");
+                oczekujacy.push(kl);
+                cout << "Dodano losowego klienta: " << i << " | " << p << endl;
+                break;
+            }
+            case 8: {
                 int op;
                 bool case5 = false;
                 while (true) {
