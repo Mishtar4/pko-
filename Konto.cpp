@@ -8,9 +8,6 @@ using namespace std;
 Konto::Konto(double s, string w, string o) : saldo(s), waluta(w), ostatniaOperacja(o) {}
 
 // --- Settery ---
-void Konto::setSaldo(double s) {saldo = s;}
-void Konto::setWaluta(string w) {waluta = w;}
-void Konto::setOstatniaOperacja(string o) {ostatniaOperacja = o;}
 void Konto::setKonto(double s, string w, string o) {
     saldo = s;
     waluta = w;

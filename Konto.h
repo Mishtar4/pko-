@@ -17,9 +17,6 @@ public:
     Konto(double s = 0, string w = "PLN", string o = "Brak operacji.");
 
     // --- Settery ---
-    void setSaldo(double s);
-    void setWaluta(string w);
-    void setOstatniaOperacja(string o);
     void setKonto(double s, string w, string o);
 
     // --- Gettery ---
