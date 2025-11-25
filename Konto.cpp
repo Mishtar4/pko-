@@ -2,22 +2,25 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include <algorithm>
 using namespace std;
 
 // --- Konstruktor ---
 Konto::Konto(double s, string w, string o) : saldo(s), waluta(w), ostatniaOperacja(o) {}
 
 // --- Settery ---
-void Konto::setKonto(double s, string w, string o) {
+void Konto::setKonto(double s, string w, string o, vector<string> wyciag) {
     saldo = s;
     waluta = w;
     ostatniaOperacja = o;
+    wyciagOperacji = wyciag;
 };
 
 // --- Gettery ---
 double Konto::getSaldo() {return saldo;}
 string Konto::getWaluta() {return waluta;}
 string Konto::getOstatniaOperacja() {return ostatniaOperacja;}
+vector<string> Konto::getWyciagOperacji() {return wyciagOperacji;}
 
 // --- Usunięcie zerówek na końcu liczby ---
 string Konto::trimZeros(double value) {
@@ -41,6 +44,7 @@ void Konto::dodajPrzychod() {
     cin >> kwota;
     saldo += kwota;
     ostatniaOperacja = "Dodano przychod: " + trimZeros(kwota) + " " + waluta;
+    wyciagOperacji.push_back(ostatniaOperacja);
     cout << ostatniaOperacja << endl;
 }
 
@@ -50,14 +54,12 @@ void Konto::dodajWydatek()
     cout << "Podaj kwote wydatku: " << endl;
     double kwota;
     cin >> kwota;
-    if (saldo - kwota < 0)
-    {
-        cout << "Brak srodkow!" << endl;
-    }
+    if (saldo - kwota < 0) {cout << "Brak srodkow!" << endl;}
     else
     {
         saldo -= kwota;
         ostatniaOperacja = "Dodano wydatek: " + trimZeros(kwota) + " " + waluta;
+        wyciagOperacji.push_back(ostatniaOperacja);
         cout << ostatniaOperacja << endl;
     }
 }
@@ -67,6 +69,18 @@ void Konto::pokazSaldo()
 {
     cout << "===KONTO===\nTwoje saldo: " << saldo << " " << waluta << endl;
     cout << "\nOstatnia operacja:\n" << ostatniaOperacja << endl;
+}
+
+// --- Wyciąg wszystkich operacji na koncie kliental ---
+void Konto::wyciagWszystkichOperacji() {
+    vector<string> copy;
+    copy = wyciagOperacji;
+    cout << "== Wyciag wszystkich operacji == " << endl;
+    reverse(copy.begin(), copy.end());
+    if (copy.empty()) {cout << "Brak operacji." << endl;}
+    for (auto i : copy) {
+        cout << i << endl;
+    }
 }
 
 // --- Zmiana waluty konta ---
@@ -92,5 +106,6 @@ void Konto::zmienWalute()
     double stare_saldo = saldo;
     saldo *= kurs[stara_waluta][waluta];
     ostatniaOperacja = "Konwertacja: " + trimZeros(stare_saldo) + " " + stara_waluta + " => " + trimZeros(saldo) + " " + waluta;
+    wyciagOperacji.push_back(ostatniaOperacja);
     cout << ostatniaOperacja << endl;
 }

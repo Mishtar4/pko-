@@ -24,7 +24,7 @@ public:
     void setKlient(string i, string p);
 
     // --- Settery dla Konto ---
-    void setKonto(double s, string w, string o);
+    void setKonto(double s, string w, string o, vector<string> wo);
 
     // --- Gettery dla Klienta ---
     string getImie();
@@ -34,11 +34,13 @@ public:
     double getSaldo();
     string getWaluta();
     string getOstatniaOperacja();
+    vector<string> getWyciagOperacji();
 
     // --- Praca z kontem ---
     void dodajPrzychod();
     void dodajWydatek();
     void pokazSaldo();
+    void wyciagWszystkichOperacji();
     void zmienWalute();
 };
 

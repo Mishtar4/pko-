@@ -57,7 +57,7 @@ void CallCenter::obsluzWybor(int wybor) {
         case 6: podgladStanu(); break;
         case 7: dodanieLosowegoKlienta(); break;
         case 8: menuKonta(); break;
-        default: cout << "Nie ma takiej opcji." << endl; break;;
+        default: cout << "Nie ma takiej opcji." << endl; break;
     }
 }
 
@@ -77,7 +77,7 @@ void CallCenter::noweZgloszenie() {
     string problem;
     getline(cin, problem);
 
-    // --- Tworzenie klienta ---
+    // --- Identyfikacja klienta ---
     kl.setKlient(imie, problem);
     oczekujacy.push(kl);
 }
@@ -90,15 +90,20 @@ void CallCenter::wczytajKontoJesliIstnieje(Klient& kl, const string& imie) {
 
     //Odczyt stanu konta, jezeli klient istnieje
     if (file.is_open()) {
+        // s - saldo, w - waluta, o - ostatniaOperacja, i - tymczasowa zmienna, wo - wszystkie operacje
         double s;
-        string w, o;
+        string w, o, i;
+        vector<string> wo;
         file >> s;
         file.ignore();
         getline(file, w);
-        getline(file, o);
+        while (getline(file, i)) {
+            wo.push_back(i);
+        }
+        if (!wo.empty()) {o = wo.back();}
 
         // --- Ustawienie konta istniejącego klienta ---
-        kl.setKonto(s, w, o);
+        kl.setKonto(s, w, o, wo);
 
         file.close();
     }
@@ -248,7 +253,7 @@ void CallCenter::dodanieLosowegoKlienta() {
     string p = problemy[rand() % problemy.size()];
     Klient kl;
     kl.setKlient(i, p);
-    kl.setKonto(rand()%1000, "PLN", "Brak operacji.");
+    kl.setKonto(rand()%1000, "PLN", "Brak operacji.", {});
     oczekujacy.push(kl);
     cout << "Dodano losowego klienta: " << i << " | " << p << endl;
 }
@@ -262,7 +267,8 @@ void CallCenter::menuKonta() {
         "1. Dodaj przychod\n" <<
         "2. Dodaj wydatek\n" <<
         "3. Pokaz aktualne saldo\n" <<
-        "4. Zmien walute\n" <<
+        "4. Wszystkie operacje\n" <<
+        "5. Zmien walute\n" <<
         "0. Zakoncz dzialanie\n" <<
         "Wybor: ";
         cin >> op;
@@ -270,7 +276,8 @@ void CallCenter::menuKonta() {
             case 1: aktywna.dodajPrzychod(); break;
             case 2: aktywna.dodajWydatek(); break;
             case 3: aktywna.pokazSaldo(); break;
-            case 4: aktywna.zmienWalute(); break;
+            case 4: aktywna.wyciagWszystkichOperacji(); break;
+            case 5: aktywna.zmienWalute(); break;
             case 0: {
                 wyjdz = true;
                 zapiszKontoAktywnego();
@@ -289,7 +296,10 @@ void CallCenter::zapiszKontoAktywnego() {
     if (file.is_open()) {
         file << aktywna.getSaldo() << endl;
         file << aktywna.getWaluta() << endl;
-        file << aktywna.getOstatniaOperacja() << endl;
+        // file << aktywna.getOstatniaOperacja() << endl;
+        for (auto i : aktywna.getWyciagOperacji()) {
+            file << i << endl;
+        }
         file.close();
     } else {
         cout << "Nie udalo sie nadpisac pliku." << endl;
