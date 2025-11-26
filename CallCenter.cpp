@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <vector>
-using namespace std;
+#include <limits>
 
 // --- Konstruktor ---
 CallCenter::CallCenter(const string& dir) : maAktywna(false), aktywna() , dataDir(dir) {}
@@ -16,7 +16,7 @@ void CallCenter::run() {
     while (true) {
         pokazMenu();
         cin >> wybor;
-        cin.ignore();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         if (!maAktywna && wybor == 8) {
             cout << "Nie ma takiej opcji." << endl;
@@ -95,7 +95,7 @@ void CallCenter::wczytajKontoJesliIstnieje(Klient& kl, const string& imie) {
         string w, o, i;
         vector<string> wo;
         file >> s;
-        file.ignore();
+        file.ignore(numeric_limits<streamsize>::max(), '\n');
         getline(file, w);
         while (getline(file, i)) {
             wo.push_back(i);
@@ -296,7 +296,6 @@ void CallCenter::zapiszKontoAktywnego() {
     if (file.is_open()) {
         file << aktywna.getSaldo() << endl;
         file << aktywna.getWaluta() << endl;
-        // file << aktywna.getOstatniaOperacja() << endl;
         for (auto i : aktywna.getWyciagOperacji()) {
             file << i << endl;
         }

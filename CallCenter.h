@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 #include "Klient.h"
-using namespace std;
 
 class CallCenter {
 public:

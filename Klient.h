@@ -3,7 +3,7 @@
 
 #include "Konto.h"
 #include <string>
-using namespace std;
+#include <vector>
 
 // --- Dane podstawowe klienta ---
 class Klient {
@@ -18,29 +18,29 @@ public:
     Klient(string i = "", string p = "");
 
     // --- Wypisanie imieniu i problemu klienta ---
-    const void pokaz();
+    void pokaz() const;
 
     // --- Settery imię i problem ---
     void setKlient(string i, string p);
 
     // --- Settery dla Konto ---
-    void setKonto(double s, string w, string o, vector<string> wo);
+    void setKonto(double s, string w, string o, const vector<string>& wo);
 
     // --- Gettery dla Klienta ---
-    string getImie();
-    string getProblem();
+    string getImie() const;
+    string getProblem() const;
 
     // --- Gettery dla Konto ---
-    double getSaldo();
-    string getWaluta();
-    string getOstatniaOperacja();
-    vector<string> getWyciagOperacji();
+    double getSaldo() const;
+    string getWaluta() const;
+    string getOstatniaOperacja() const;
+    vector<string> getWyciagOperacji() const;
 
     // --- Praca z kontem ---
     void dodajPrzychod();
     void dodajWydatek();
-    void pokazSaldo();
-    void wyciagWszystkichOperacji();
+    void pokazSaldo() const;
+    void wyciagWszystkichOperacji() const;
     void zmienWalute();
 };
 

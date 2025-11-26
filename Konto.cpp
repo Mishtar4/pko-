@@ -3,13 +3,12 @@
 #include <string>
 #include <unordered_map>
 #include <algorithm>
-using namespace std;
 
 // --- Konstruktor ---
 Konto::Konto(double s, string w, string o) : saldo(s), waluta(w), ostatniaOperacja(o) {}
 
 // --- Settery ---
-void Konto::setKonto(double s, string w, string o, vector<string> wyciag) {
+void Konto::setKonto(double s, string w, string o, const vector<string>& wyciag) {
     saldo = s;
     waluta = w;
     ostatniaOperacja = o;
@@ -17,10 +16,10 @@ void Konto::setKonto(double s, string w, string o, vector<string> wyciag) {
 };
 
 // --- Gettery ---
-double Konto::getSaldo() {return saldo;}
-string Konto::getWaluta() {return waluta;}
-string Konto::getOstatniaOperacja() {return ostatniaOperacja;}
-vector<string> Konto::getWyciagOperacji() {return wyciagOperacji;}
+double Konto::getSaldo() const {return saldo;}
+string Konto::getWaluta() const {return waluta;}
+string Konto::getOstatniaOperacja() const {return ostatniaOperacja;}
+vector<string> Konto::getWyciagOperacji() const {return wyciagOperacji;}
 
 // --- Usunięcie zerówek na końcu liczby ---
 string Konto::trimZeros(double value) {
@@ -65,20 +64,22 @@ void Konto::dodajWydatek()
 }
 
 // --- Wyswietlanie stanu konta ---
-void Konto::pokazSaldo()
+void Konto::pokazSaldo() const
 {
     cout << "===KONTO===\nTwoje saldo: " << saldo << " " << waluta << endl;
     cout << "\nOstatnia operacja:\n" << ostatniaOperacja << endl;
 }
 
 // --- Wyciąg wszystkich operacji na koncie kliental ---
-void Konto::wyciagWszystkichOperacji() {
-    vector<string> copy;
-    copy = wyciagOperacji;
+void Konto::wyciagWszystkichOperacji() const {
+    if (wyciagOperacji.empty()) {
+        cout << "== Wyciag wszystkich operacji == \nBrak operacji." << endl;
+        return;
+    }
+    vector<string> copy = wyciagOperacji;
     cout << "== Wyciag wszystkich operacji == " << endl;
     reverse(copy.begin(), copy.end());
-    if (copy.empty()) {cout << "Brak operacji." << endl;}
-    for (auto i : copy) {
+    for (const auto& i : copy) {
         cout << i << endl;
     }
 }
