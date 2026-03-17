@@ -1,0 +1,4 @@
+12.48
+EUR
+Dodano przychod: 52 PLN
+Konwertacja: 52 PLN => 12.48 EUR

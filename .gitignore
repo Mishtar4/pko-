@@ -1,7 +1,6 @@
 # ---- JetBrains / CLion ----
 .idea/
 *.iml
-CMakeLists.txt
 
 # ---- CMake ----
 CMakeFiles/
@@ -13,6 +12,8 @@ Makefile
 # Data: ignore all in data/, except .gitkeep
 data/*
 !data/.gitkeep
+!data/Mikolaj.txt
+!data/Mykhailo.txt
 
 # ---- Executables ----
 *.exe
